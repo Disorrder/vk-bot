@@ -1,14 +1,14 @@
 module.exports = [
     {
+        active: true,
         chat_id: 52,
-        game: 'TT2',
-        type: 'boss'
+        ext: ['TT2'],
         clanTag: 'RUS',
     },
     {
+        active: true,
         chat_id: 49,
-        game: 'TT2',
-        type: 'boss'
+        ext: ['TT2'],
         clanTag: 'AYE',
     }
 ];
