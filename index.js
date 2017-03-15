@@ -1,22 +1,36 @@
 require('babel-register');
-
+const cfg = require('./config.json');
 const Koa = require('koa');
-const app = new Koa();
+const Router = require('koa-router');
 
-// response
-// app.use(ctx => {
-//   ctx.body = 'Hello Koa';
-// });
+global.hostUrl = `http://${cfg.api.hostname}:${cfg.api.port}`
+const vkRouter = require('./vk/routes');
 
-// async
-app.use(async (ctx, next) => {
-  const start = new Date();
-  await next();
-  const ms = new Date() - start;
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
+var app = new Koa();
+var router = new Router();
 
-  ctx.body = 'Hello Koa';
+// --- middlewares ---
+app.use(require('koa-cookie').default());
+app.use(require('koa-bodyparser')());
+app.use(require('koa-session2')());
+
+const passport = require('koa-passport');
+app.use(passport.initialize());
+app.use(passport.session());
+
+// --- routing ---
+router.get('/', (ctx) => {
+    ctx.body = 'Hey!'
 });
 
-app.listen(3000);
-console.log('Server is ready on 3000 port!');
+router.use('/vk', vkRouter.routes(), vkRouter.allowedMethods());
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
+;
+
+// --- start server ---
+app.listen(cfg.api.port, () => {
+    console.log(`Server has run on ${global.hostUrl}`);
+});

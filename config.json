@@ -1,6 +1,6 @@
 {
     "api": {
-        "active": false,
+        "active": true,
         "https": false,
         "hostname": "localhost",
         "host": "0.0.0.0",
