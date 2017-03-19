@@ -11,12 +11,16 @@
     "koa-bodyparser": "^4.1.0",
     "koa-cookie": "^1.0.0",
     "koa-passport": "^3.0.0",
+    "koa-pug": "^3.0.0-2",
     "koa-router": "^7.0.0",
     "koa-session": "^5.0.0",
+    "koa-static": "^3.0.0",
+    "mongoose": "^4.9.0",
     "passport-vkontakte": "^0.3.2"
   },
   "scripts": {
-    "start": "npm run nodemon",
+    "start": "node index.js",
+    "//": "--- Running with node 6.x ---",
     "babel": "npm run babel-node index.js",
     "nodemon": "nodemon index.js --exec babel-node",
     "babel-node": "./node_modules/.bin/babel-node"
