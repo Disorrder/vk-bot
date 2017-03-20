@@ -1,4 +1,37 @@
 extends ../index.pug
 
 block content
-    div HEY!!
+    div.container
+        each user in users
+            div.card.my-1(data-id=user.vk.id)
+                div.card-header.py-1
+                    if user.vk
+                        a(href=user.vk.profileUrl)
+                            span.text-uppercase.text-info.pr-2 vk
+                    b #{user.name}
+                div.card-block.py-2
+                    div
+                        b Active:
+                        span #{user.active}
+                    //- div.inliner-container
+                        b.inliner-width Token:
+                        code.inliner-width.mx-1(style="max-width: calc(100% - 60px - 35px);") #{user.access_token}
+                        button.btn.btn-sm.btn-warning R
+                    div.d-flex
+                        b Token:
+                        code.text-truncate.mx-1 #{user.access_token}
+                        
+                        button.btn.btn-sm.btn-warning R
+                    div.mt-1
+                        a.btn.btn-sm.btn-primary(href="#") Обновить токен
+        else
+            div.alert.alert-warning Нет ни одного бота
+
+        div.mt-2
+            div
+                | Добавить:
+                a.btn.btn-sm.btn-outline-success.text-uppercase.ml-1(href="/vk/token" target="_blank") vk
+            //- div.pull-right
+                a.btn.btn-sm.btn-primary Сохранить
+
+    div#addModal.modal.fade

@@ -14,10 +14,12 @@ router.get('/token', (ctx) => {
     ctx.body = "Getting token";
 });
 
-router.get('/auth', passport.authenticate('vkontakte'));
+router.get('/auth', passport.authenticate('vkontakte'), async (ctx, next) => {
+    console.log('auth', ctx);
+});
 router.get('/auth/callback', passport.authenticate('vkontakte', {
-    successRedirect: '/vk',
-    failureRedirect: '/vk_auth_fail'
+    successRedirect: '/bot',
+    failureRedirect: '/vk?status=failed'
 }));
 
 module.exports = router;

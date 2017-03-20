@@ -1,6 +1,7 @@
 require('babel-register');
 const cfg = require('./config.json');
 global.hostUrl = `http://${cfg.api.hostname}:${cfg.api.port}`;
+if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
 
 require('./model');
 
@@ -12,7 +13,8 @@ const serve = require('koa-static');
 app.use(serve('./web'));
 app.use(require('koa-cookie').default());
 app.use(require('koa-bodyparser')());
-app.use(require('koa-session')());
+app.use(require('koa-session')(app));
+app.keys = ['appKey']; // some secret shit for koa-session
 
 const passport = require('koa-passport');
 app.use(passport.initialize());
@@ -24,8 +26,8 @@ var router = new Router();
 const webRouter = require('./web');
 const vkRouter = require('./vk');
 
-router.use('/', webRouter.routes(), webRouter.allowedMethods());
-router.use('/api/vk', vkRouter.routes(), vkRouter.allowedMethods());
+router.use('', webRouter.routes(), webRouter.allowedMethods());
+router.use('/vk', vkRouter.routes(), vkRouter.allowedMethods());
 
 app
   .use(router.routes())
