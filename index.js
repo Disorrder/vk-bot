@@ -3,8 +3,6 @@ const cfg = require('./config.json');
 global.hostUrl = `http://${cfg.api.hostname}:${cfg.api.port}`;
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
 
-require('./model');
-
 const Koa = require('koa');
 var app = new Koa();
 
@@ -24,9 +22,11 @@ app.use(passport.session());
 const Router = require('koa-router');
 var router = new Router();
 const webRouter = require('./web');
+const apiRouter = require('./api');
 const vkRouter = require('./vk');
 
 router.use('', webRouter.routes(), webRouter.allowedMethods());
+router.use('', apiRouter.routes(), apiRouter.allowedMethods());
 router.use('/vk', vkRouter.routes(), vkRouter.allowedMethods());
 
 app

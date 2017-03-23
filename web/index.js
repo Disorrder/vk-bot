@@ -8,7 +8,7 @@ var pug = new Pug({
 });
 
 
-const User = require('../model/User');
+const User = require('../api/user/model');
 
 router.get('/index.html', (ctx) => ctx.redirect('/'))
 router.get('/', (ctx) => {

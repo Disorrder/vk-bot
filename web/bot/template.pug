@@ -1,5 +1,9 @@
 extends ../index.pug
 
+block head
+    link(rel="stylesheet" href="/bot/style.css")
+    title VK Bot - users
+
 block content
     div.container
         each user in users
@@ -10,20 +14,28 @@ block content
                             span.text-uppercase.text-info.pr-2 vk
                     b #{user.name}
                 div.card-block.py-2
-                    div
-                        b Active:
-                        span #{user.active}
-                    //- div.inliner-container
-                        b.inliner-width Token:
-                        code.inliner-width.mx-1(style="max-width: calc(100% - 60px - 35px);") #{user.access_token}
-                        button.btn.btn-sm.btn-warning R
-                    div.d-flex
+                    div.d-flex.user__token.field-editable
+                        b Token:
+                        code.text-truncate.mx-1.fe-view.fe__show #{user.access_token}
+                        button.btn.btn-sm.btn-warning.fe-edit.fe__show(onclick="refreshToken()") Refresh
+
+                        input.code.form-control.text-truncate.mx-1.py-0.fe-model.fe__hide(style="width: 100%;")
+                        div.btn-toolbar.fe__hide
+                            button.btn.btn-sm.btn-success.fe-save(onclick="saveToken(event)") OK
+                            button.btn.btn-sm.btn-danger.fe-cancel Cancel
+
+                    //- form.d-flex(onsubmit="saveToken(event)" )
                         b Token:
                         code.text-truncate.mx-1 #{user.access_token}
-                        
-                        button.btn.btn-sm.btn-warning R
-                    div.mt-1
-                        a.btn.btn-sm.btn-primary(href="#") Обновить токен
+                        button.btn.btn-sm.btn-warning(onclick="editToken(event)") Refresh
+
+                        div.user__token_edit(style="display: none;")
+                            b Token:
+                            input.code.form-control.text-truncate.mx-1.py-0(name="access_token" style="width: 100%;")
+                            div.btn-toolbar
+                                button.btn.btn-sm.btn-success(type="submit" onclick="saveToken(event)") OK
+                                button.btn.btn-sm.btn-danger(type="button") Cancel
+
         else
             div.alert.alert-warning Нет ни одного бота
 
@@ -35,3 +47,6 @@ block content
                 a.btn.btn-sm.btn-primary Сохранить
 
     div#addModal.modal.fade
+
+block include
+    script(src="/bot/page.controller.js")

@@ -1,7 +1,7 @@
 const cfg = require('./config.json');
 const passport = require('koa-passport');
 const VKontakteStrategy = require('passport-vkontakte').Strategy;
-const User = require('../model/User');
+const User = require('../api/user/model');
 
 passport.use(new VKontakteStrategy(
     {
@@ -14,6 +14,7 @@ passport.use(new VKontakteStrategy(
         User.findOne({ 'vk.id': profile.id })
             .then((user) => {
                 if (user) return user;
+                delete profile._raw;
                 user = new User({
                     name: profile.displayName,
                     vk: profile,

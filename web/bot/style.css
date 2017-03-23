@@ -1,0 +1,21 @@
+.field-editable:not(.editing) .fe__hide {
+    display: none;
+}
+
+.field-editable.editing .fe__show {
+    display: none;
+}
+
+
+/* Bootstrap styling */
+.btn-toolbar > .btn + .btn {
+    margin-left: .25rem;
+}
+
+input.code {
+    padding: .2rem .4rem;
+    font-size: 90%;
+    color: #bd4147;
+    background-color: #f7f7f9;
+    border-radius: .25rem;
+}
