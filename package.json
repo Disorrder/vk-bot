@@ -16,7 +16,9 @@
     "koa-session": "^5.0.0",
     "koa-static": "^3.0.0",
     "mongoose": "^4.9.0",
-    "passport-vkontakte": "^0.3.2"
+    "passport-vkontakte": "^0.3.2",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0"
   },
   "scripts": {
     "start": "node index.js",
