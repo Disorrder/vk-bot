@@ -38,3 +38,36 @@ app
 app.listen(cfg.api.port, () => {
     console.log(`Server has run on ${global.hostUrl}`);
 });
+
+// --- start up ---
+const User = require('./api/user/model');
+const VK = require('./vk/api');
+const Bot = require('./chat');
+
+async function run() {
+    // -- init bot per user --
+    var users = await User.find({active: true, vk: {$exists: true}});
+    const vkCfg = require('./vk/config');
+
+    users.forEach(async (user) => {
+        var vk = new VK(vkCfg);
+        vk.access_token = user.access_token;
+        vk.message_token = user.access_token;
+
+        var defaultBot = new Bot(['TT2']);
+        defaultBot.vk = vk;
+
+        await vk.initLongPoll();
+        vk.messages.start();
+        vk.messages.on('message', (msg) => {
+            console.log('lp.message', msg.text);
+            var bot = defaultBot;
+            var tested = bot.test.test(msg.text);
+            if (tested) {
+                msg.bot_text = msg.text.replace(bot.test, '');
+                bot.reply(msg);
+            }
+        });
+    });
+}
+run();

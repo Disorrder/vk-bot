@@ -39,7 +39,6 @@ commands.forEach((v) => {
         let reg = v.text;
         // reg = reg.replace(/\.$/i, '.*'); // '($|[,.!?])'
         v.test = new RegExp(`^${reg}`, 'i');
-        console.log(v.test);
     }
 });
 

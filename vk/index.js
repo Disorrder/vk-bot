@@ -23,37 +23,3 @@ router.get('/auth/callback', passport.authenticate('vkontakte', {
 }));
 
 module.exports = router;
-
-// example
-const vk = require('./api').vk;
-const Bot = require('../chat');
-var bot = new Bot(['TT2']);
-bot.vk = vk;
-
-router.get('/messages', async ctx => {
-    var res = await vk.method('messages.get', {count: ctx.query.count});
-    ctx.body = res;
-});
-router.get('/messages.send', async ctx => {
-    var res = await vk.method('messages.send', ctx.query);
-    ctx.body = res;
-});
-
-vk.$promise.then(() => {
-    let q = vk.initLongPoll();
-    q.then((hmm) => {
-        vk.messages.start();
-        // vk.messages.on('new', (res) => {
-        //     console.log('lp.new:', res);
-        // });
-
-        vk.messages.on('message', (msg) => {
-            console.log('lp.message:', msg.chat_id, msg.text);
-            var tested = bot.test.test(msg.text);
-            if (tested) {
-                msg.bot_text = msg.text.replace(bot.test, '');
-                bot.reply(msg);
-            }
-        });
-    })
-})

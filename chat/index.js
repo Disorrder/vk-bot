@@ -2,18 +2,16 @@ class Bot {
     constructor(ext = []) {
         this.ext = ext.concat(['basic']);
         this.extensions = this.ext.map((v) => {
-            let ext = require('./'+v);
+            let ext = require('./extensions/'+v);
             ext.bot = this;
-            console.log(ext.bot);
             return ext;
         });
 
         this.name = 'Какао Бот';
         this.test = /^(Bot|Бот|О,? Великий)(,|\s+)\s*/i;
+        this.id = Bot.cache.length;
         Bot.cache.push(this);
     }
-
-    // get test() { return this._test || this.test = new RegExp(`^${this.name}(,|\s+)\s*`, 'i') }
 
     reply(msg) {
         this.extensions.find((ext) => {
@@ -32,17 +30,13 @@ class Bot {
 
     replyHandler(msg) {
         if (!msg.bot_reply) msg.bot_reply = 'Игнор'; // debug
-        
+
         if (msg.bot_reply) {
             msg.bot_reply = '[Bot] ' + msg.bot_reply; // debug
             this.vk.method('messages.send', {
                 peer_id: msg.peer_id,
                 message: msg.bot_reply
             });
-        }
-
-        if (msg.bot_action) { //?
-            msg.bot_action();
         }
 
         return msg;

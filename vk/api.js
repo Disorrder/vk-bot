@@ -7,14 +7,19 @@ class VK {
         this.client_secret = options.client_secret;
         this.v = options.v || VK.v;
         this.access_token = options.access_token;
+        this.message_token = options.message_token;
     }
 
     static get v() { return 5.62 }
 
     method(name, query) {
+        var token = this.access_token;
+        var namespace = name.split('.')[0];
+        if (namespace === 'messages') token = this.message_token;
+
         query = Object.assign({
             v: this.v,
-            access_token: this.access_token,
+            access_token: token,
         }, query);
 
         return rp({
@@ -40,7 +45,7 @@ class VK {
     }
 
     async initLongPoll() {
-        var res = await vk.method('messages.getLongPollServer');
+        var res = await this.method('messages.getLongPollServer');
         if (!res || !res.response) return console.log('[ERROR] messages.getLongPollServer responded', res);
         res = res.response;
         // this.longPollParams = res;
@@ -60,13 +65,3 @@ class VK {
 }
 
 module.exports = VK;
-
-const cfg = require('./config.json');
-const User = require('../api/user/model');
-var vk = new VK(cfg);
-vk.$promise = User.findOne({active: true}).then((user) => {
-    vk.access_token = user.access_token;
-    console.log('ACCESS TOKEN WAS DEFINED', user.access_token);
-});
-
-module.exports.vk = vk;
