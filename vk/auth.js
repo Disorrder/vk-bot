@@ -10,7 +10,7 @@ passport.use(new VKontakteStrategy(
         callbackURL:  `${global.hostUrl}/vk/auth/callback`,
     },
     function myVerifyCallbackFn(access_token, refreshToken, params, profile, done) {
-        console.log('VK CB', access_token, params, profile);
+        console.log('VK AUTH CB', access_token, params, profile);
         User.findOne({ 'vk.id': profile.id })
             .then((user) => {
                 if (user) return user;
@@ -18,13 +18,15 @@ passport.use(new VKontakteStrategy(
                 user = new User({
                     name: profile.displayName,
                     vk: profile,
-                    access_token,
+                    // access_token,
                 });
-                console.log('NEW USER!', user);
-                return user.save();
+                // return user.save();
+                return user;
             })
             .then((user) => {
                 // console.log('Hey, User!', user);
+                user.access_token = access_token;
+                user.save();
                 return done(null, user);
             })
             .catch(done);
@@ -37,7 +39,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    User.findOne({ vkId: id })
+    User.findOne({ 'vk.id': id })
         .then(function (user) { done(null, user); })
         .catch(done);
 });

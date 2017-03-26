@@ -10,6 +10,7 @@ var schema = new Schema({
     role: String,
     vk: Schema.Types.Mixed,
     access_token: String,
+    message_token: String,
 }, { timestamps: true });
 
 var User = mongoose.model('User', schema);

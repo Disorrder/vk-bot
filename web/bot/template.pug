@@ -14,17 +14,27 @@ block content
                             span.text-uppercase.text-info.pr-2 vk
                     b #{user.name}
                 div.card-block.py-2
-                    div.d-flex.user__token.field-editable
+                    div.d-flex.user__access_token.__field-editable
                         b Token:
                         code.text-truncate.mx-1.fe-view.fe__show #{user.access_token}
-                        button.btn.btn-sm.btn-warning.fe-edit.fe__show(onclick="refreshToken()") Refresh
+                        a.btn.btn-sm.btn-warning.fe-edit.fe__show(href="/vk/auth" target="_blank") Refresh
+
+                        //- input.code.form-control.text-truncate.mx-1.py-0.fe-model.fe__hide(style="width: 100%;")
+                        //- div.btn-toolbar.fe__hide
+                            button.btn.btn-sm.btn-success.fe-save(onclick="saveMessageToken(event)") OK
+                            button.btn.btn-sm.btn-danger.fe-cancel Cancel
+
+                    div.d-flex.user__message_token.field-editable
+                        b Token:
+                        code.text-truncate.mx-1.fe-view.fe__show #{user.message_token}
+                        button.btn.btn-sm.btn-warning.fe-edit.fe__show(onclick="refreshMessageToken()") Refresh
 
                         input.code.form-control.text-truncate.mx-1.py-0.fe-model.fe__hide(style="width: 100%;")
                         div.btn-toolbar.fe__hide
-                            button.btn.btn-sm.btn-success.fe-save(onclick="saveToken(event)") OK
+                            button.btn.btn-sm.btn-success.fe-save(onclick="saveMessageToken(event)") OK
                             button.btn.btn-sm.btn-danger.fe-cancel Cancel
 
-                    //- form.d-flex(onsubmit="saveToken(event)" )
+                    //- form.d-flex(onsubmit="saveMessageToken(event)" )
                         b Token:
                         code.text-truncate.mx-1 #{user.access_token}
                         button.btn.btn-sm.btn-warning(onclick="editToken(event)") Refresh
@@ -33,7 +43,7 @@ block content
                             b Token:
                             input.code.form-control.text-truncate.mx-1.py-0(name="access_token" style="width: 100%;")
                             div.btn-toolbar
-                                button.btn.btn-sm.btn-success(type="submit" onclick="saveToken(event)") OK
+                                button.btn.btn-sm.btn-success(type="submit" onclick="saveMessageToken(event)") OK
                                 button.btn.btn-sm.btn-danger(type="button") Cancel
 
         else

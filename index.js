@@ -52,7 +52,7 @@ async function run() {
     users.forEach(async (user) => {
         var vk = new VK(vkCfg);
         vk.access_token = user.access_token;
-        vk.message_token = user.access_token;
+        vk.message_token = user.message_token;
 
         var defaultBot = new Bot(['TT2']);
         defaultBot.vk = vk;

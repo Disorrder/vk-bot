@@ -26,6 +26,7 @@ router.put('/:id', async ctx => {
     if (!user) return;
 
     if (data.access_token) user.access_token = data.access_token;
+    if (data.message_token) user.message_token = data.message_token;
 
     user.save();
     ctx.body = user;

@@ -1,13 +1,13 @@
 // --- init ---
-function refreshToken() {
+function refreshMessageToken() {
     window.open('/vk/token', 'Refresh token')
 }
-function saveToken(e) {
+function saveMessageToken(e) {
     var card = $(e.target).parents('.card');
     var field = $(e.currentTarget).parents('.field-editable');
     var model = field.find('.fe-model');
     saveUser(card.data('id'), {
-        access_token: model[0].value
+        message_token: model[0].value
     });
 }
 
