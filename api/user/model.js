@@ -10,9 +10,7 @@ var schema = new Schema({
     role: String,
     vk: Schema.Types.Mixed,
     access_token: String,
-    created_at: Date,
-    updated_at: Date
-});
+}, { timestamps: true });
 
 var User = mongoose.model('User', schema);
 

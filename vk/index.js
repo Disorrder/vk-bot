@@ -27,7 +27,9 @@ module.exports = router;
 // example
 const vk = require('./api').vk;
 const Bot = require('../chat');
-var bot = new Bot();
+var bot = new Bot(['TT2']);
+bot.vk = vk;
+
 router.get('/messages', async ctx => {
     var res = await vk.method('messages.get', {count: ctx.query.count});
     ctx.body = res;
@@ -51,12 +53,6 @@ vk.$promise.then(() => {
             if (tested) {
                 msg.bot_text = msg.text.replace(bot.test, '');
                 bot.reply(msg);
-                if (msg.bot_reply) {
-                    vk.method('messages.send', {
-                        peer_id: msg.peer_id,
-                        message: msg.bot_reply
-                    });
-                }
             }
         });
     })

@@ -15,6 +15,7 @@
     "koa-router": "^7.0.0",
     "koa-session": "^5.0.0",
     "koa-static": "^3.0.0",
+    "moment": "^2.18.1",
     "mongoose": "^4.9.0",
     "passport-vkontakte": "^0.3.2",
     "request": "^2.81.0",
