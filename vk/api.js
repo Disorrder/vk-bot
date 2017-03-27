@@ -48,8 +48,6 @@ class VK {
         var res = await this.method('messages.getLongPollServer');
         if (!res || !res.response) return console.log('[ERROR] messages.getLongPollServer responded', res);
         res = res.response;
-        // this.longPollParams = res;
-        // let url = `https://${res.server}?act=a_check&key=${res.key}&ts=${res.ts}&wait=25&mode=2&version=1`;
         let url = `https://${res.server}`;
         let query = {
             act: 'a_check',

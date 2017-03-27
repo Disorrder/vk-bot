@@ -1,10 +1,10 @@
 const LongPoll = require('./LongPoll');
 const _ = require('lodash');
 
-// not stable: not sure about each service uses 'ts' in query
 class LongPollVk extends LongPoll {
     handleResponse(res) {
         if (res.failed > 1) this.stop();
+        if (res.failed) console.log('LP ERROR', res);
         if (res.failed) return this.emit('error', res);
 
         if (!_.isArray(res.updates)) return;

@@ -9,13 +9,12 @@ block content
         each user in users
             div.card.my-1(data-id=user.vk.id)
                 div.card-header.py-1
-                    if user.vk
-                        a(href=user.vk.profileUrl)
-                            span.text-uppercase.text-info.pr-2 vk
+                    a(href=user.vk.profileUrl)
+                        span.text-uppercase.text-info.pr-2 vk
                     b #{user.name}
                 div.card-block.py-2
                     div.d-flex.user__access_token.__field-editable
-                        b Token:
+                        b Access Token:
                         code.text-truncate.mx-1.fe-view.fe__show #{user.access_token}
                         a.btn.btn-sm.btn-warning.fe-edit.fe__show(href="/vk/auth" target="_blank") Refresh
 
@@ -25,7 +24,7 @@ block content
                             button.btn.btn-sm.btn-danger.fe-cancel Cancel
 
                     div.d-flex.user__message_token.field-editable
-                        b Token:
+                        b Message Token:
                         code.text-truncate.mx-1.fe-view.fe__show #{user.message_token}
                         button.btn.btn-sm.btn-warning.fe-edit.fe__show(onclick="refreshMessageToken()") Refresh
 

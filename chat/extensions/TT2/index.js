@@ -18,7 +18,6 @@ var commands = [
             var time = moment(boss.createdAt).add(config.bossRespawn, 'ms')
             var dur = moment.duration( time.diff(Date.now()) );
             dur = `${dur.hours()}ч ${dur.minutes()}мин`;
-            console.log('BOSS', boss.createdAt, dur);
             msg.bot_reply = `Босс будет через ${dur} (В ${time.format('HH:mm')} по Мск)`;
             return msg;
         }
@@ -53,7 +52,7 @@ var commands = [
             let time = moment().add(dur, 'ms');
             boss.createdAt = +time.clone().subtract(config.bossRespawn);
             boss.save();
-            msg.bot_reply = `Записано. Босс будет в ${time.format('DD.MM.YYYY HH:mm')} по Мск. ${boss.createdAt}`;
+            msg.bot_reply = `Записано. Босс будет в ${time.format('DD.MM.YYYY HH:mm')} по Мск.`;
             return msg;
         }
     },
