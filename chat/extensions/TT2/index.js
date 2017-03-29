@@ -12,7 +12,8 @@ var config = {
 
 var commands = [
     {
-        text: '(когда|сколько до|время до|во сколько|через сколько)? ?(босса?).?$',
+        cmd: 'tt2_boss',
+        text: '(когда |сколько до |время до |во сколько |через сколько )?(босса?)$',
         async reply(msg) {
             var boss = await Boss.findOne().sort('-createdAt');
             var time = moment(boss.createdAt).add(config.bossRespawn, 'ms')
@@ -23,6 +24,7 @@ var commands = [
         }
     },
     {
+        cmd: 'tt2_boss_dead',
         text: 'босс (умер|рип|погиб)',
         async reply(msg) {
             var boss = await Boss.findOne().sort('-createdAt');
@@ -38,9 +40,10 @@ var commands = [
         }
     },
     {
+        cmd: 'tt2_boss_set',
         text: 'босс (будет )?через',
         async reply(msg) {
-            var dur = msg.text.match(/\d+:\d+(:\d+)?/i);
+            var dur = msg.bot_text.match(/\d+:\d+(:\d+)?/i);
             if (!dur) {
                 msg.bot_reply = 'Неверный формат данных. Время должно быть "чч:мм" или "чч:мм:сс" (секунды можно не писать)';
                 return msg;
@@ -57,6 +60,7 @@ var commands = [
         }
     },
     {
+        cmd: 'tt2_boss_get_cooldown',
         text: '(Какой )?кд босса',
         reply(msg) {
             msg.bot_reply = config.bossRespawn + 'ms';
@@ -64,39 +68,14 @@ var commands = [
     },
 ];
 
-commands = commands.concat([
-    {
-        text: 'boss$',
-        reply: commands[0].reply
-    },
-    {
-        text: 'boss (rip|dead)$',
-        reply: commands[1].reply
-    },
-]);
-
 commands.forEach((v) => {
     if (!v.test) {
         let reg = v.text;
-        reg = reg.replace(/\.$/i, '.*'); // '($|[,.!?])'
+        // reg = reg.replace(/\$$/i, '\\W*$');
         v.test = new RegExp(`^${reg}`, 'i');
     }
 });
 
-function extension(msg) {
-    var cmd = commands.find((cmd) => cmd.test.test(msg.bot_text));
-    if (cmd) {
-        msg.handled = true;
-        if (_.isFunction(cmd.reply)) {
-            let res = cmd.reply(msg);
-            if (res.then) msg.bot_promise = res;
-        } else if (_.isArray(cmd.reply)) {
-            msg.bot_reply = cmd.reply[_.random(cmd.reply.length-1)];
-        } else {
-            msg.bot_reply = cmd.reply;
-        }
-    }
-    return msg;
+module.exports = {
+    commands
 };
-
-module.exports = extension;

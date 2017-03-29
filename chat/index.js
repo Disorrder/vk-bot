@@ -1,23 +1,74 @@
-class Bot {
-    constructor(ext = []) {
-        this.ext = ext.concat(['basic']);
-        this.extensions = this.ext.map((v) => {
-            let ext = require('./extensions/'+v);
-            ext.bot = this;
-            return ext;
-        });
+const _ = require('lodash');
 
-        this.name = 'Какао Бот';
-        this.test = /^(Bot|Бот|О,? Великий)(,|\s+)\s*/i;
-        this.id = Bot.cache.length;
+class Bot {
+    constructor(params = {}) {
+        this.name = params.name || 'Какао Бот';
+        this.test = params.test || new RegExp(`^(Bot|Бот|${this.name})([,]?\\s*)`, 'i');
+        this.id = params.id || Bot.cache.length;
+
+        this.commands = [];
+
+        let ext = params.ext || [];
+        ext = ext.concat(['basic']);
+        ext.forEach(this.regExtension.bind(this));
+
         Bot.cache.push(this);
     }
 
+    regExtension(extName) {
+        let ext = require('./extensions/'+extName);
+        // ext is Object with {commands[]} // TODO: think about replace or mixing
+        // TODO: think about ext is a function(bot)
+        console.log('regExt', ext.commands);
+
+        ext.commands.forEach(this.addCommand.bind(this));
+    }
+
+    addCommand(command) {
+        return this.commands.push(command);
+        // --- TODO: think about mixing ---
+        let existCmd = this.commands.find((v) => v.cmd === command.cmd);
+        if (!existCmd) return this.commands.push(command);
+
+        if (command.text || command.test) {
+            console.log('Bot warning: no support for mixing "text" and "test" fields');
+        }
+
+        if (command.reply) {
+            if (_.isFunction(command.reply) || _.isFunction(existCmd.reply)) {
+                console.log('Bot warning: no support for mixing functions');
+            } else {
+                existCmd.reply = _.flatten([existCmd.reply, command.reply]);
+            }
+        }
+    }
+
+    interpolate(text) {
+        text = text.replace(/\${bot\.name}/gi, this.name);
+        return text;
+    }
+
     reply(msg) {
-        this.extensions.find((ext) => {
-            ext(msg);
-            return msg.handled;
-        });
+        var cmd;
+        if (msg.text.indexOf('bot') === 0) {
+            let [cmdName, ...params] = msg.bot_text.split(' ');
+            cmd = this.commands.find((command) => command.cmd === cmdName);
+            msg.bot_text_params = params;
+        } else {
+            cmd = this.commands.find((command) => command.test.test(msg.bot_text));
+        }
+
+        if (cmd) {
+            msg.handled = true;
+            if (_.isFunction(cmd.reply)) {
+                let res = cmd.reply(msg);
+                if (res.then) msg.bot_promise = res;
+            } else if (_.isArray(cmd.reply)) {
+                msg.bot_reply = cmd.reply[_.random(cmd.reply.length-1)];
+            } else {
+                msg.bot_reply = cmd.reply;
+            }
+        }
 
         if (msg.bot_promise) { // return message or promise here?
             return msg.bot_promise.then((msg) => {
@@ -32,6 +83,8 @@ class Bot {
         if (!msg.bot_reply) msg.bot_reply = 'Игнор'; // debug
 
         if (msg.bot_reply) {
+            if (msg.bot_reply.indexOf('${')+1) msg.bot_reply = this.interpolate(msg.bot_reply);
+
             msg.bot_reply = '[Bot] ' + msg.bot_reply; // debug
             this.vk.method('messages.send', {
                 peer_id: msg.peer_id,

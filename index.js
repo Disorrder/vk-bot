@@ -54,7 +54,7 @@ async function run() {
         vk.access_token = user.access_token;
         vk.message_token = user.message_token;
 
-        var defaultBot = new Bot(['TT2']);
+        var defaultBot = new Bot({ext: ['TT2']});
         defaultBot.vk = vk;
 
         await vk.initLongPoll();
