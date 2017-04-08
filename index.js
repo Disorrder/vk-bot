@@ -40,9 +40,11 @@ app.listen(cfg.api.port, () => {
 });
 
 // --- start up ---
+const _ = require('lodash');
 const User = require('./api/user/model');
 const VK = require('./vk/api');
 const Bot = require('./chat');
+const vkChats = require('./vk/chats');
 
 async function run() {
     // -- init bot per user --
@@ -59,9 +61,26 @@ async function run() {
 
         await vk.initLongPoll();
         vk.messages.start();
-        vk.messages.on('message', (msg) => {
-            console.log('lp.message', msg.text);
+        vk.messages.on('message.private', (msg) => {
+            // console.log('lp.message', msg.text);
             var bot = defaultBot;
+            var tested = bot.test.test(msg.text);
+            if (tested) {
+                msg.bot_text = msg.text.replace(bot.test, '');
+                bot.reply(msg);
+            }
+        });
+        vk.messages.on('message.chat', (msg) => {
+            console.log('lp.message.chat', msg, msg.text);
+            var bot = Bot.getById(msg.chat_id);
+            if (!bot) {
+                let vkChat = _.find(vkChats, {
+                    active: true,
+                    chat_id: msg.chat_id,
+                });
+                bot = new Bot(vkChat);
+                bot.vk = vk;
+            }
             var tested = bot.test.test(msg.text);
             if (tested) {
                 msg.bot_text = msg.text.replace(bot.test, '');

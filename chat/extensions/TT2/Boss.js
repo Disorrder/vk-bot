@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
+    clanTag: String,
     spawned: Date,
     dead: Date,
     // damage: [],

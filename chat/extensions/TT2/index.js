@@ -14,8 +14,13 @@ var commands = [
     {
         cmd: 'tt2_boss',
         text: '(когда |сколько до |время до |во сколько |через сколько )?(босса?)$',
-        async reply(msg) {
-            var boss = await Boss.findOne().sort('-createdAt');
+        async reply(msg, bot) {
+            var boss = await Boss.findOne({clanTag: bot.clanTag}).sort('-createdAt');
+            if (!boss) {
+                msg.bot_reply = 'Ничего не найдено';
+                return msg;
+            }
+
             var time = moment(boss.createdAt).add(config.bossRespawn, 'ms')
             var dur = moment.duration( time.diff(Date.now()) );
             dur = `${dur.hours()}ч ${dur.minutes()}мин`;
@@ -26,14 +31,15 @@ var commands = [
     {
         cmd: 'tt2_boss_dead',
         text: 'босс (умер|рип|погиб)',
-        async reply(msg) {
-            var boss = await Boss.findOne().sort('-createdAt');
+        async reply(msg, bot) {
+            var boss = await Boss.findOne({clanTag: bot.clanTag}).sort('-createdAt');
             if (boss) {
                 boss.dead = Date.now();
             }
 
             boss = new Boss();
             boss.createdAt = Date.now();
+            boss.clanTag = bot.clanTag;
             boss.save();
             msg.bot_reply = 'Записано ' + boss._id;
             return msg;
@@ -42,7 +48,7 @@ var commands = [
     {
         cmd: 'tt2_boss_set',
         text: 'босс (будет )?через',
-        async reply(msg) {
+        async reply(msg, bot) {
             var dur = msg.bot_text.match(/\d+:\d+(:\d+)?/i);
             if (!dur) {
                 msg.bot_reply = 'Неверный формат данных. Время должно быть "чч:мм" или "чч:мм:сс" (секунды можно не писать)';
@@ -51,7 +57,7 @@ var commands = [
             let [h, m, s] = dur[0].split(':');
             dur = (+h) * HOUR + (+m) * MIN + (+s||0) * SEC;
 
-            var boss = await Boss.findOne().sort('-createdAt');
+            var boss = await Boss.findOne({clanTag: bot.clanTag}).sort('-createdAt');
             let time = moment().add(dur, 'ms');
             boss.createdAt = +time.clone().subtract(config.bossRespawn);
             boss.save();

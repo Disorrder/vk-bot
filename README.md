@@ -15,18 +15,19 @@ Developement: `nodemon index.js`
 Production: `pm2 index.js`  - Not implemented yet!
 
 ### Running on Node.js 6.x
-Demo: `npm run babel`
+<!-- Demo: `npm run babel` -->
 Developement: `npm run nodemon`
-Production: `npm run pm2` - Not implemented yet!
+<!-- Production: `npm run pm2` - Not implemented yet! -->
 
 # Features roadmap
- - [ ] Добавить раздельные чаты
+ - [x] Добавить раздельные чаты
  - [ ] Добавить обновление токена на сервере
  - [ ] Добавить перезапуск бота при изменении токена
- - [ ] Добавить команды для фраз и обобщить расширения
- - [ ] Формат команд: `bot cmd clanTag text` (`bot basic_hello`, `bot tt2_boss_dead RUS 12:34`)
+ - [x] Добавить команды для фраз и обобщить расширения
+ - [x] Формат команд: `bot cmd clanTag text` (`bot basic_hello`, `bot tt2_boss_dead RUS 12:34`)
  - [ ] Поддержка других соцсетей и чатов:
     - [ ] Discord
+ - [ ] Продумать апи лучше, структуру чат румов и вообще // vkChat = vkChatRoom???
 
  - [ ] Перевести интерфейс на отдельный урл (?)
  - [ ] Добавить интерфейс для редактирования расширений

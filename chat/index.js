@@ -5,6 +5,9 @@ class Bot {
         this.name = params.name || 'Какао Бот';
         this.test = params.test || new RegExp(`^(Bot|Бот|${this.name})([,]?\\s*)`, 'i');
         this.id = params.id || Bot.cache.length;
+        this.network = params.network || null;
+        this.clanTag = params.clanTag || null;
+        this.admins = params.admins || [];
 
         this.commands = [];
 
@@ -19,7 +22,7 @@ class Bot {
         let ext = require('./extensions/'+extName);
         // ext is Object with {commands[]} // TODO: think about replace or mixing
         // TODO: think about ext is a function(bot)
-        console.log('regExt', ext.commands);
+        // console.log('regExt', ext.commands);
 
         ext.commands.forEach(this.addCommand.bind(this));
     }
@@ -61,7 +64,7 @@ class Bot {
         if (cmd) {
             msg.handled = true;
             if (_.isFunction(cmd.reply)) {
-                let res = cmd.reply(msg);
+                let res = cmd.reply(msg, this);
                 if (res.then) msg.bot_promise = res;
             } else if (_.isArray(cmd.reply)) {
                 msg.bot_reply = cmd.reply[_.random(cmd.reply.length-1)];

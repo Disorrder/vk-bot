@@ -1,9 +1,10 @@
 module.exports = [
     {
         active: true,
+        network: 'vk',
         chat_id: 56,
-        ext: ['TT2'],
         clanTag: 'RUS',
-        admin: []
+        admins: [],
+        ext: ['TT2'],
     },
 ];
