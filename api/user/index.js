@@ -2,15 +2,7 @@ const User = require('./model');
 const Router = require('koa-router');
 var router = new Router();
 
-// find by VK id. TODO: refactor
-// router.get('/:id', (ctx) => {
-//     return User.findOne({
-//         'vk.id': +ctx.params.id
-//     }).then((user) => {
-//         ctx.body = user;
-//     });
-// });
-// -- variant 2 --
+// find by VK id. TODO: refactor???
 router.get('/:id', async ctx => {
     var user = await User.findOne({
         'vk.id': +ctx.params.id
@@ -30,6 +22,12 @@ router.put('/:id', async ctx => {
 
     user.save();
     ctx.body = user;
+});
+
+// some shit
+const casper = require('casper');
+router.get('/:id/vkRefreshMessageToken', async (ctx) => {
+    
 });
 
 module.exports = router;

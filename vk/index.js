@@ -22,4 +22,29 @@ router.get('/auth/callback', passport.authenticate('vkontakte', {
     failureRedirect: '/vk?status=failed'
 }));
 
+// phantom methods
+const phantom = require('phantom');
+const User = require('../api/user/model');
+router.get('/phantom/login', async (ctx) => {
+    const instance = await phantom.create();
+    const page = await instance.createPage();
+    await page.on("onResourceRequested", function(requestData) {
+        console.info('Requesting', requestData.url)
+    });
+
+    const status = await page.open('https://vk.com/');
+    console.log(status);
+    // console.log(page.phantom.getTitle());
+    return;
+
+    const content = await page.property('content');
+    // console.log(content);
+    ctx.body = content;
+
+    await instance.exit();
+});
+router.get('/phantom/refreshMessageToken', async (ctx) => {
+    // var user = await User.findOne()
+});
+
 module.exports = router;
