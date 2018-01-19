@@ -1,5 +1,7 @@
 # vk-bot
 Node.js VK chat bot
+**WARNING** Do not recommend for use now. It doesn't ready.
+**ВНИМАНИЕ** Если кто-то это вообще читает, Бот ещё не готов, не рекомендую использовать!
 
 ## Requirements
  - Node.js >= 7.6.0
