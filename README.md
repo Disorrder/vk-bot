@@ -1,8 +1,6 @@
 # vk-bot
-Node.js VK chat bot
-
-**WARNING** Do not recommend for use now. It doesn't ready.
-
+Node.js VK chat bot \
+**WARNING** Do not recommend for use now. It doesn't ready. \
 **ВНИМАНИЕ** Если кто-то это вообще читает, Бот ещё не готов, не рекомендую использовать!
 
 ## Requirements
@@ -14,10 +12,8 @@ Node.js VK chat bot
  - `npm i`
 
 ## Running
-Demo: `node index.js`
-
-Developement: `nodemon index.js`
-
+Demo: `node index.js` \
+Developement: `nodemon index.js` \
 Production: `pm2 index.js`  - Not implemented yet!
 
 ### Running on Node.js 6.x
